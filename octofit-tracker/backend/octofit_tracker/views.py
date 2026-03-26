@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from .models import User, Team, Activity, Leaderboard, Workout
 from .serializers import UserSerializer, TeamSerializer, ActivitySerializer, LeaderboardSerializer, WorkoutSerializer
-from django.urls import reverse
 
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
