@@ -22,6 +22,7 @@ function ResourceTableCard({
   primaryFields,
   secondaryFields,
   emptyMessage,
+  onDataFetched,
 }) {
   const [items, setItems] = useState([]);
   const [error, setError] = useState('');
@@ -42,14 +43,18 @@ function ResourceTableCard({
 
       const data = await response.json();
       console.log(`${title} fetched data:`, data);
-      setItems(normalizeApiResponse(data));
+      const normalizedData = normalizeApiResponse(data);
+      setItems(normalizedData);
+      if (onDataFetched) {
+        onDataFetched(normalizedData, data);
+      }
     } catch (err) {
       console.error(`${title} fetch failed:`, err);
       setError(err.message);
     } finally {
       setIsLoading(false);
     }
-  }, [endpoint, title]);
+  }, [endpoint, onDataFetched, title]);
 
   useEffect(() => {
     loadItems();

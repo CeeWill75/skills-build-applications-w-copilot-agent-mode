@@ -8,6 +8,7 @@ import Workouts from './components/Workouts';
 
 function App() {
   const navItems = [
+    { path: '/', label: 'Home' },
     { path: '/users', label: 'Users' },
     { path: '/activities', label: 'Activities' },
     { path: '/teams', label: 'Teams' },
@@ -22,12 +23,6 @@ function App() {
           <div className="card-body p-4">
             <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
               <h1 className="display-6 mb-0">OctoFit Tracker</h1>
-              <a
-                className="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                href="/"
-              >
-                Home
-              </a>
             </div>
 
             <nav className="navbar navbar-expand-lg p-0" aria-label="OctoFit main navigation">
@@ -57,6 +52,7 @@ function App() {
             <Route path="/teams" element={<Teams />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/workouts" element={<Workouts />} />
+            <Route path="*" element={<Users />} />
           </Routes>
         </main>
       </div>

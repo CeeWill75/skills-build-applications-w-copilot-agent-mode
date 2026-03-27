@@ -14,6 +14,10 @@ export function getApiBaseUrl() {
   return 'http://localhost:8000/api';
 }
 
+export function getApiEndpoint(resource) {
+  return `${getApiBaseUrl()}/${resource}/`;
+}
+
 export function normalizeApiResponse(payload) {
   if (Array.isArray(payload)) {
     return payload;
