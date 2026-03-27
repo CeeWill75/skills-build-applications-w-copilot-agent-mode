@@ -1,9 +1,16 @@
 import { useEffect } from 'react';
-import { getApiEndpoint } from './apiUtils';
 import ResourceTableCard from './ResourceTableCard';
 
 function Leaderboard() {
-  const endpoint = getApiEndpoint('leaderboard');
+  const host = window.location.hostname;
+  const codespaceSuffix = '-3000.app.github.dev';
+  const inferredCodespaceName = host.endsWith(codespaceSuffix)
+    ? host.slice(0, -codespaceSuffix.length)
+    : '';
+  const codespaceName = process.env.REACT_APP_CODESPACE_NAME || inferredCodespaceName;
+  const endpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/leaderboard/`
+    : 'http://localhost:8000/api/leaderboard/';
 
   useEffect(() => {
     console.log('[Leaderboard] REST endpoint:', endpoint);

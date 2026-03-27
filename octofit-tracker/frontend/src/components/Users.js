@@ -1,9 +1,16 @@
 import { useEffect } from 'react';
-import { getApiEndpoint } from './apiUtils';
 import ResourceTableCard from './ResourceTableCard';
 
 function Users() {
-  const endpoint = getApiEndpoint('users');
+  const host = window.location.hostname;
+  const codespaceSuffix = '-3000.app.github.dev';
+  const inferredCodespaceName = host.endsWith(codespaceSuffix)
+    ? host.slice(0, -codespaceSuffix.length)
+    : '';
+  const codespaceName = process.env.REACT_APP_CODESPACE_NAME || inferredCodespaceName;
+  const endpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/users/`
+    : 'http://localhost:8000/api/users/';
 
   useEffect(() => {
     console.log('[Users] REST endpoint:', endpoint);

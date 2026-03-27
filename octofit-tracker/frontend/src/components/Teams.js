@@ -1,9 +1,16 @@
 import { useEffect } from 'react';
-import { getApiEndpoint } from './apiUtils';
 import ResourceTableCard from './ResourceTableCard';
 
 function Teams() {
-  const endpoint = getApiEndpoint('teams');
+  const host = window.location.hostname;
+  const codespaceSuffix = '-3000.app.github.dev';
+  const inferredCodespaceName = host.endsWith(codespaceSuffix)
+    ? host.slice(0, -codespaceSuffix.length)
+    : '';
+  const codespaceName = process.env.REACT_APP_CODESPACE_NAME || inferredCodespaceName;
+  const endpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/teams/`
+    : 'http://localhost:8000/api/teams/';
 
   useEffect(() => {
     console.log('[Teams] REST endpoint:', endpoint);
