@@ -1,0 +1,38 @@
+:root {
+  --octofit-bg: linear-gradient(135deg, #eef4ff 0%, #d6ecff 100%);
+  --octofit-header: linear-gradient(120deg, #0d6efd 0%, #0b5ed7 50%, #0a58ca 100%);
+}
+
+body {
+  background: var(--octofit-bg);
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-shell header.card {
+  background: var(--octofit-header);
+  color: #ffffff;
+}
+
+.octofit-section-card {
+  border-radius: 1rem;
+}
+
+.octofit-table {
+  margin-bottom: 0;
+}
+
+.octofit-table tbody tr {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.octofit-table td,
+.octofit-table th {
+  vertical-align: middle;
+}
+
+.modal-backdrop.show {
+  opacity: 0.4;
+}
