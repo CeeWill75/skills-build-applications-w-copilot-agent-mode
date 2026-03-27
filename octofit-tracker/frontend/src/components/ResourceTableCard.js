@@ -35,21 +35,18 @@ function ResourceTableCard({
     setError('');
 
     try {
-      console.log(`${title} endpoint:`, endpoint);
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error(`${title} request failed with status ${response.status}`);
       }
 
       const data = await response.json();
-      console.log(`${title} fetched data:`, data);
       const normalizedData = normalizeApiResponse(data);
       setItems(normalizedData);
       if (onDataFetched) {
         onDataFetched(normalizedData, data);
       }
     } catch (err) {
-      console.error(`${title} fetch failed:`, err);
       setError(err.message);
     } finally {
       setIsLoading(false);

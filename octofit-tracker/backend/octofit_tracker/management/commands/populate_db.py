@@ -1,55 +1,41 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth import get_user_model
-from djongo import models
-from pymongo import MongoClient
+from ...models import User, Team, Activity, Leaderboard, Workout
 
-# Sample data for population
-def get_sample_data():
-    return {
-        'users': [
-            {'name': 'Superman', 'email': 'superman@dc.com', 'team': 'DC'},
-            {'name': 'Batman', 'email': 'batman@dc.com', 'team': 'DC'},
-            {'name': 'Wonder Woman', 'email': 'wonderwoman@dc.com', 'team': 'DC'},
-            {'name': 'Iron Man', 'email': 'ironman@marvel.com', 'team': 'Marvel'},
-            {'name': 'Captain America', 'email': 'cap@marvel.com', 'team': 'Marvel'},
-            {'name': 'Spider-Man', 'email': 'spiderman@marvel.com', 'team': 'Marvel'},
-        ],
-        'teams': [
-            {'name': 'Marvel'},
-            {'name': 'DC'},
-        ],
-        'activities': [
-            {'user': 'superman@dc.com', 'activity': 'Flight', 'duration': 60},
-            {'user': 'batman@dc.com', 'activity': 'Martial Arts', 'duration': 45},
-            {'user': 'ironman@marvel.com', 'activity': 'Engineering', 'duration': 50},
-        ],
-        'leaderboard': [
-            {'user': 'superman@dc.com', 'score': 100},
-            {'user': 'ironman@marvel.com', 'score': 95},
-        ],
-        'workouts': [
-            {'name': 'Strength', 'description': 'Strength training workout'},
-            {'name': 'Cardio', 'description': 'Cardio workout'},
-        ]
-    }
 
 class Command(BaseCommand):
     help = 'Populate the octofit_db database with test data'
 
     def handle(self, *args, **options):
-        client = MongoClient('localhost', 27017)
-        db = client['octofit_db']
-        data = get_sample_data()
+        # Clear existing data
+        User.objects.all().delete()
+        Team.objects.all().delete()
+        Activity.objects.all().delete()
+        Leaderboard.objects.all().delete()
+        Workout.objects.all().delete()
 
-        # Clear collections
-        for collection in data.keys():
-            db[collection].delete_many({})
+        # Create teams
+        dc = Team.objects.create(name='DC')
+        marvel = Team.objects.create(name='Marvel')
 
-        # Insert data
-        for collection, docs in data.items():
-            db[collection].insert_many(docs)
+        # Create users
+        User.objects.create(name='Superman', email='superman@dc.com', team=dc.name)
+        User.objects.create(name='Batman', email='batman@dc.com', team=dc.name)
+        User.objects.create(name='Wonder Woman', email='wonderwoman@dc.com', team=dc.name)
+        User.objects.create(name='Iron Man', email='ironman@marvel.com', team=marvel.name)
+        User.objects.create(name='Captain America', email='cap@marvel.com', team=marvel.name)
+        User.objects.create(name='Spider-Man', email='spiderman@marvel.com', team=marvel.name)
 
-        # Ensure unique index on email for users
-        db['users'].create_index('email', unique=True)
+        # Create activities
+        Activity.objects.create(user='superman@dc.com', activity='Flight', duration=60)
+        Activity.objects.create(user='batman@dc.com', activity='Martial Arts', duration=45)
+        Activity.objects.create(user='ironman@marvel.com', activity='Engineering', duration=50)
+
+        # Create leaderboard entries
+        Leaderboard.objects.create(user='superman@dc.com', score=100)
+        Leaderboard.objects.create(user='ironman@marvel.com', score=95)
+
+        # Create workouts
+        Workout.objects.create(name='Strength', description='Strength training workout')
+        Workout.objects.create(name='Cardio', description='Cardio workout')
 
         self.stdout.write(self.style.SUCCESS('octofit_db database populated with test data.'))
